@@ -19,9 +19,20 @@ def suggest_menu(occasion: str) -> str:
         return "Buffet with high-energy and healthy food."
     else:
         return "Custom menu for the butler."
+        
+# Tool to calculate the time needed for the party
+@tool
+def calculate_party_time(tasks: list) -> str:
+    """
+    Calculates the total preparation time for the party.
+    Args:
+        tasks: A list of tasks with their respective time estimates.
+    """
+    total_time = sum(duration for task, duration in tasks)
+    return f"Total preparation time: {total_time} minutes."
 
 # Alfred, the butler, preparing the menu for the party
-agent = CodeAgent(tools=[suggest_menu], model=HfApiModel())
+agent = CodeAgent(tools=[suggest_menu, calculate_party_time], model=HfApiModel())
 
 # Preparing the menu for the party
 agent.run( """
