@@ -3,7 +3,6 @@ This project demonstrates a reliable, executable pattern for using the smolagent
 Instead of relying on free-form code generation, the project separates:
 
 - Deterministic execution (Python tools)
-
 - Natural-language narration (LLM)
 
 This approach avoids common agent runtime errors while still benefiting from large language models.
