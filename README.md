@@ -52,7 +52,7 @@ This project demonstrates a production-oriented alternative:
 
 ## Usage
 
-Run the [training-model.py](http://_vscodecontentref_/0) script to see the agent in action:
+Run the training-model.py script to see the agent in action:
 ```sh
 python training-model.py
 ```
