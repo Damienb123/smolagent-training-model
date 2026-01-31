@@ -1,47 +1,99 @@
-from smolagents import CodeAgent, tool, HfApiModel
-import numpy as numpy
-import time
-import datetime
+# Import necessary modules
+from smolagents import tool
+from smolagents.models import TransformersModel
+from datetime import datetime, timedelta
 
-# Tool to suggest a menu based on the occasion
+
+# Define tools for the party planning model
+# Tools: suggest_menu, parse_tasks, calculate_party_time, calculate_finish_time
 @tool
 def suggest_menu(occasion: str) -> str:
     """
-    Suggests a menu based on the occasion.
+    Suggest a menu based on the occasion.
+
     Args:
-        occasion: The type of occasion for the party.
+        occasion (str): Type of occasion.
+
+    Returns:
+        str: Suggested menu.
     """
     if occasion == "casual":
         return "Pizza, snacks, and drinks."
     elif occasion == "formal":
-        return "3-course dinner with wine and dessert."
+        return "Three-course dinner with wine and dessert."
     elif occasion == "superhero":
-        return "Buffet with high-energy and healthy food."
-    else:
-        return "Custom menu for the butler."
-        
-# Tool to calculate the time needed for the party
+        return "High-energy buffet with healthy options."
+    return "Custom menu."
+
+
 @tool
-def calculate_party_time(tasks: list) -> str:
+def parse_tasks(_: str) -> list:
     """
-    Calculates the total preparation time for the party.
+    Return predefined preparation tasks and durations.
+
     Args:
-        tasks: A list of tasks with their respective time estimates.
+        _ (str): Ignored input.
+
+    Returns:
+        list: List of (task, duration_minutes).
     """
-    total_time = sum(duration for task, duration in tasks)
-    return f"Total preparation time: {total_time} minutes."
+    return [
+        ("Prepare drinks", 30),
+        ("Decorate mansion", 60),
+        ("Set up menu", 45),
+        ("Prepare music and playlist", 45),
+    ]
 
-# Alfred, the butler, preparing the menu for the party
-agent = CodeAgent(tools=[suggest_menu, calculate_party_time], model=HfApiModel())
 
-# Preparing the menu for the party
-agent.run( """
-    Alfred needs to prepare for the party. Here are the tasks:
-    1. Prepare the drinks - 30 minutes
-    2. Decorate the mansion - 60 minutes
-    3. Set up the menu - 45 minutes
-    4. Prepare the music and playlist - 45 minutes
-
-    If we start right now, at what time will the party be ready?
+@tool
+def calculate_party_time(tasks: list) -> int:
     """
-          )
+    Calculate total preparation time.
+
+    Args:
+        tasks (list): List of (task, duration).
+
+    Returns:
+        int: Total duration in minutes.
+    """
+    return sum(duration for _, duration in tasks)
+
+
+@tool
+def calculate_finish_time(start_time: str, total_minutes: int) -> str:
+    """
+    Calculate finish time from a start time and duration.
+
+    Args:
+        start_time (str): Start time in HH:MM format.
+        total_minutes (int): Duration in minutes.
+
+    Returns:
+        str: Finish time in HH:MM format.
+    """
+    start = datetime.strptime(start_time, "%H:%M")
+    finish = start + timedelta(minutes=total_minutes)
+    return finish.strftime("%H:%M")
+
+
+
+# Example usage of the tools
+# Get tasks and calculate total preparation time
+tasks = parse_tasks("")
+total_minutes = calculate_party_time(tasks)
+# Calculate finish time from current time
+now = datetime.now().strftime("%H:%M")
+finish_time = calculate_finish_time(now, total_minutes)
+# Print finish time
+print(f"Party will be ready at {finish_time}")
+
+
+
+# Generate a polite explanation using a language model
+model = TransformersModel(model_id="YOUR_MODEL_ID_HERE")
+response = model.generate_text(
+    f"The party will be ready at {finish_time}. Explain politely as a butler."
+)
+
+print(response)
+
