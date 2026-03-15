@@ -1,61 +1,72 @@
-# smolagent-training-model
-This project demonstrates a reliable, executable pattern for using the smolagents library to support party planning tasks.
-Instead of relying on free-form code generation, the project separates:
+# Smolagent Training Model
 
-- Deterministic execution (Python tools)
-- Natural-language narration (LLM)
+> A tool-based AI agent built with smolagents that separates deterministic Python execution from LLM-based language generation.
 
-This approach avoids common agent runtime errors while still benefiting from large language models.
 
-## What this Project Does
+# Project Overview
 
-- Calculates total preparation time for a party
-- Determines the exact finish time based on the current clock
-- Optionally generates a polite, in-character explanation using an LLM (“Alfred the butler”)
-- Demonstrates how to define and validate @tool functions in smolagents
+This project demonstrates how to design **tool-based AI agents** using the `smolagents` framework.  
+Instead of relying on language models to generate executable code, the system separates:
 
-## Architecture Overview
-- `parse_tasks` – returns predefined preparation tasks
-- `calculate_party_time` – sums task durations
-- `calculate_finish_time` – computes the finish time
-- `suggest_menu` – suggests a menu based on occasion
+- Deterministic logic (Python tools)
+- Natural language explanations (LLMs)
 
-## Installation
+This improves **reliability, reproducibility, and debugging** when building AI agents.
 
-1. Clone the repository:
-    ```sh
-    git clone https://github.com/Damienb123/training-model.git
-    cd training-model
-    ```
 
-2. Install the required dependencies:
-    ```sh
-    pip install smolagents transformers torch
-    ```
+# Features
 
-## Example Output
-```
-Party will be ready at 00:39
-Good evening, sir. All preparations will be completed precisely on schedule...
-```
+- Calculates total preparation time for party tasks
+- Determines finish time based on the current clock
+- Generates polite explanations using an LLM
+- Demonstrates `@tool` integration with smolagents
+- Shows a hybrid architecture combining Python logic with LLM narration
 
-## Why This Approach 
-Many agent examples rely on language models to generate and execute code, which can lead to:
-- Parsing errors
-- Runtime failures
-- Non-deterministic behavior
+# Tools / Components
 
-This project demonstrates a production-oriented alternative:
-- Python handles logic
-- LLMs handle language
-- Tools are explicit and testable
+| Component | Purpose |
+|--------|--------|
+| `suggest_menu()` | Suggests menu based on occasion |
+| `parse_tasks()` | Returns predefined preparation tasks |
+| `calculate_party_time()` | Computes total preparation time |
+| `calculate_finish_time()` | Determines final completion time |
 
-## Usage
 
-Run the training-model.py script to see the agent in action:
-```sh
-python training-model.py
+# Technologies Used
+
+- Python
+- smolagents
+- Hugging Face Transformers
+- PyTorch
+- Tool-based AI agents
+
+# Installation
+
+Clone the repository:
+
+```bash
+git clone https://github.com/Damienb123/smolagent-training-model.git
+cd smolagent-training-model
+
 ```
 
-## Acknowledgements
-This project uses the smolagents library, which leverages models from Hugging Face to create intelligent agents.
+Install dependencies:
+```bash
+pip install smolagents transformers torch
+```
+
+# Key Design Decisions
+Instead of allowing the LLM to generate executable code dynamically, this project uses deterministic Python tools. This approach:
+
+- prevents runtime errors
+- ensures predictable results
+- makes the system easier to test
+
+The language model is only responsible for natural-language explanations.
+
+# What I learned
+This project helped me explore:
+
+- Tool-based AI agent architectures
+- Integrating deterministic functions with LLM workflows
+- Building more reliable AI systems by separating logic and language generation
